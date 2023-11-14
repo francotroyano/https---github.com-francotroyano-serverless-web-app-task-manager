@@ -8,10 +8,9 @@ function loadTasks() {
 
     // Example tasks
     const tasks = [
-        { text: "Sample Task 1", completed: false },
-        { text: "Sample Task 2", completed: true },
+        { name: "Sample Task 1", description: "Description for Sample Task 1", completed: false },
+        { name: "Sample Task 2", description: "Description for Sample Task 2", completed: true },
         // Add more tasks as needed
-        // Deberán cargar las tareas que tenga el usuario en DynamoDB
     ];
 
     tasks.forEach(function(task, index) {
@@ -20,14 +19,18 @@ function loadTasks() {
 }
 
 function addTask() {
-    const taskInput = document.getElementById("taskInput");
-    const taskText = taskInput.value.trim();
+    const taskNameInput = document.getElementById("taskNameInput");
+    const taskDescriptionInput = document.getElementById("taskDescriptionInput");
 
-    if (taskText !== "") {
-        const task = { text: taskText, completed: false };
+    const taskName = taskNameInput.value.trim();
+    const taskDescription = taskDescriptionInput.value.trim();
+
+    if (taskName !== "") {
+        const task = { name: taskName, description: taskDescription, completed: false };
         addTaskToList(task);
         saveTask(task);
-        taskInput.value = "";
+        taskNameInput.value = "";
+        taskDescriptionInput.value = "";
     }
 }
 
@@ -36,24 +39,24 @@ function addTaskToList(task, index) {
 
     const li = document.createElement("li");
     li.innerHTML = `
-        <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
-        <button onclick="toggleTask(this)">Toggle</button>
-        <button onclick="deleteTask(this)">Delete</button>
+        <strong class="${task.completed ? 'completed' : ''}">${task.name}</strong>
+        <p>${task.description}</p>
+        <button class="toggle-btn">Toggle</button>
+        <button class="delete-btn">Delete</button>
     `;
 
     taskList.appendChild(li);
 }
 
-function toggleTask(button) {
+function toggleTask(index) {
     const taskList = document.getElementById("taskList");
-    const li = button.parentElement;
-    const span = li.querySelector('span');
+    const taskItem = taskList.childNodes[index];
 
     // Toggle the completed status
-    span.classList.toggle('completed');
+    const strongElement = taskItem.querySelector('strong');
+    strongElement.classList.toggle('completed');
 
     // Implement code to update the task's completion status in storage (e.g., localStorage) here
-    // Modificar el código para que invoque a la RESTful API para cambiar el estado de la tarea
 }
 
 function deleteTask(button) {
@@ -61,13 +64,22 @@ function deleteTask(button) {
     const li = button.parentElement;
     taskList.removeChild(li);
     // Implement code to delete the task from storage (e.g., localStorage) here
-    // Modificar el código para que invoque a la RESTful API para borrar la tarea
 }
 
 function saveTask(task) {
     // Save the task to localStorage or any other storage mechanism
     // You can use JSON.stringify() to convert the task object to a string
-    // Modificar el código para que invoque a la RESTful API para guardar la tarea
 }
 
-// You can customize and extend this code based on your specific requirements.
+// Delegación de eventos para los botones Toggle y Delete
+document.getElementById("taskList").addEventListener("click", function(event) {
+    const target = event.target;
+
+    if (target.classList.contains("toggle-btn")) {
+        const li = target.parentElement;
+        const index = Array.from(li.parentElement.children).indexOf(li);
+        toggleTask(index);
+    } else if (target.classList.contains("delete-btn")) {
+        deleteTask(target);
+    }
+});

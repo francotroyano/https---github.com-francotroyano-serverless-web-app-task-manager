@@ -15,20 +15,25 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     width: 400px;
+    text-align: center; /* Centrar el contenido */
 }
 
 h1 {
     color: #3498db; /* Azul brillante */
 }
 
-input[type="text"], button {
+input[type="text"], textarea, button {
+    box-sizing: border-box; /* Incluir el relleno y el borde en el ancho total */
     padding: 10px;
     margin: 5px;
     border: 1px solid #3498db; /* Borde azul brillante */
     border-radius: 5px;
+    width: calc(100% - 20px); /* Restar el doble del margen para ajustar al ancho del contenedor */
+    font-family: 'Arial', sans-serif; /* Estilo de fuente */
+    font-size: 14px; /* Tamaño de fuente */
 }
 
-input[type="text"]:focus, button:focus {
+input[type="text"]:focus, textarea:focus, button:focus {
     outline: none;
     box-shadow: 0 0 5px #3498db; /* Sombra al enfocar */
 }
@@ -40,8 +45,8 @@ ul {
 
 li {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column; /* Alinear los elementos en columna */
+    align-items: center; /* Alinear al centro del contenedor */
     margin-bottom: 10px;
     padding: 10px;
     background-color: #ecf0f1; /* Fondo gris claro para cada tarea */
